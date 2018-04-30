@@ -76,7 +76,7 @@ export default {
           .join(','),
       },
       template: 'template.html',
-      filename: resolve(__dirname, 'index.html'),
+      filename: PROD ? resolve(__dirname, 'index.html') : 'index.html',
       minify: PROD && {
         collapseWhitespace: true,
       },

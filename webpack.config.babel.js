@@ -76,7 +76,10 @@ export default {
           .join(','),
       },
       template: 'template.html',
-      minify: PROD,
+      filename: resolve(__dirname, 'index.html'),
+      minify: PROD && {
+        collapseWhitespace: true,
+      },
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),

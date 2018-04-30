@@ -232,11 +232,12 @@ type State = {|
 export class Tuner extends React.PureComponent<Props, State> {
   componentWillMount() {
     this.sizeUpdate(this.props.noteBlockSize);
-    this.listen();
+    this.listen(this.props.interval);
   }
 
   componentWillReceiveProps(nextProps: Props) {
     this.sizeUpdate(nextProps.noteBlockSize);
+    this.listen(nextProps.interval);
   }
 
   componentWillUnmount() {
@@ -251,7 +252,7 @@ export class Tuner extends React.PureComponent<Props, State> {
     });
   }
 
-  listen() {
+  listen(interval: number = 100) {
     this.stop();
 
     this.interval = setInterval(() => {
@@ -265,7 +266,7 @@ export class Tuner extends React.PureComponent<Props, State> {
         noteLabel: note.label,
         lineOffset: position(noteOffset),
       });
-    }, this.props.interval || 100);
+    }, interval);
   }
 
   stop() {

@@ -3,15 +3,9 @@
 import * as React from 'react';
 import styled, { css } from 'styled-components';
 import sys from 'system-components';
-// import { pure, compose } from 'recompose';
 import { pure } from 'recompose';
 
-// import { combineLatest } from 'rxjs/observable/combineLatest';
-// import { interval } from 'rxjs/observable/interval';
-// import { map } from 'rxjs/operators/map';
-
 import { indexedNotes } from './notes';
-// import { mapPropsStream } from '../../util/mapPropsStream';
 import { createPitcher } from '../../util/createPitcher';
 
 const audioContext = new AudioContext();
@@ -25,7 +19,7 @@ navigator.mediaDevices &&
       const microphoneStream = audioContext.createMediaStreamSource(stream);
       microphoneStream.connect(analyser);
     })
-    .catch(e => console.log('Error capturing audio:', e));
+    .catch(e => console.error('Error capturing audio:', e));
 
 const log2 = Math.log(2);
 

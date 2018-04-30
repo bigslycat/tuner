@@ -33,8 +33,7 @@ const roundN = precision => {
 
 const round2 = roundN(2);
 
-const position = noteIndex =>
-  round2(noteIndex / (indexedNotes.length - 1) * 100);
+const position = noteIndex => round2(noteIndex / indexedNotes.length * 100);
 
 const getFrequency = createPitcher(audioContext, analyser);
 

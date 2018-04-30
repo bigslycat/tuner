@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    ["@babel/proposal-object-rest-spread", { "useBuiltIns": true }],
+    ["@babel/proposal-class-properties", { "loose": true }]
+  ],
+  "presets": [
+    "@babel/flow",
+    ["@babel/env", {
+      "targets": { "node": "current" },
+      "spec": true,
+      "useBuiltIns": "usage"
+    }]
+  ]
+}

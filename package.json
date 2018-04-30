@@ -1,0 +1,53 @@
+{
+  "name": "tuner",
+  "version": "1.0.0",
+  "description": "Just musical tuner",
+  "repository": "git@github.com:bigslycat/tuner.git",
+  "author": "Pavel Tereschenko <me@stupidcat.wtf> (https://github.com/bigslycat)",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "webpack-dev-server --mode development --open",
+    "build": "NODE_ENV=production webpack --mode production",
+    "lint": "eslint .",
+    "flow": "flow",
+    "precommit": "yarn lint",
+    "preversion": "git checkout master && yarn lint && yarn flow",
+    "postversion": "git push --follow-tags"
+  },
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "recompose": "^0.27.0",
+    "styled-components": "^3.2.6",
+    "styled-system": "^2.2.4",
+    "system-components": "^2.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.46",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-flow": "^7.0.0-beta.46",
+    "@babel/preset-react": "^7.0.0-beta.46",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^8.0.0-beta.2",
+    "clean-webpack-plugin": "^0.1.19",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype": "^2.46.3",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.7.0",
+    "flow-bin": "^0.71.0",
+    "flow-typed": "^2.4.0",
+    "html-webpack-plugin": "^3.2.0",
+    "prettier": "^1.12.1",
+    "react-hot-loader": "^4.1.2",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.1.2",
+    "webpack-dev-server": "^3.1.3"
+  }
+}

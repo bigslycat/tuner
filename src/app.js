@@ -5,6 +5,8 @@ import { render } from 'react-dom';
 
 import { injectGlobal } from 'styled-components';
 
+import packageJSON from '../package.json';
+
 import { App } from './components/App';
 
 injectGlobal`
@@ -22,4 +24,7 @@ injectGlobal`
   }
 `;
 
-render(<App />, (document: any).getElementById('root'));
+render(
+  <App version={packageJSON.version} />,
+  (document: any).getElementById('root'),
+);

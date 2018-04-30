@@ -23,7 +23,7 @@ const Text = sys(
 
 export const App = styled(props => (
   <div className={props.className}>
-    <Text>Musical tuner</Text>
+    <Text>Musical tuner v{props.version}</Text>
     <Tuner />
   </div>
 ))`

@@ -254,7 +254,7 @@ export class Tuner extends React.PureComponent<Props, State> {
     this.stop();
   }
 
-  sizeUpdate(noteBlockSizeRaw: number | string = '2.6em') {
+  sizeUpdate(noteBlockSizeRaw: number | string = '84px') {
     const noteBlockSize = Value.parse(noteBlockSizeRaw);
     this.setState({
       noteBlockSize,

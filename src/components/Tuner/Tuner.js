@@ -210,6 +210,22 @@ const Loading = styled.p.attrs({
   font-weight: 300;
 `;
 
+const Frequency = styled(({ value, ...props }) => (
+  <p {...props}>
+    Frequency: <b>{round2(value)}</b> Hz
+  </p>
+))`
+  color: white;
+  width: 7em;
+  margin: 0 auto;
+  font-size: 24px;
+  padding: 1em 0;
+  font-weight: 300;
+  b {
+    font-weight: 400;
+  }
+`;
+
 type Props = {|
   noteBlockSize?: number | string,
   interval?: number,
@@ -218,6 +234,7 @@ type Props = {|
 type State = {|
   noteBlockSize: Value<Unit>,
   sliderSize: Value<Unit>,
+  frequency?: number,
   noteLabel?: string,
   lineOffset?: number,
 |};
@@ -256,6 +273,7 @@ export class Tuner extends React.PureComponent<Props, State> {
       if (!note) return;
 
       this.setState({
+        frequency,
         noteLabel: note.label,
         lineOffset: position(noteOffset),
       });
@@ -270,22 +288,25 @@ export class Tuner extends React.PureComponent<Props, State> {
 
   render() {
     return this.state.noteLabel ? (
-      <Wrapper>
-        <Down />
-        <SlideBox>
-          <Slider
-            size={this.state.sliderSize}
-            length={indexedNotes.length}
-            offset={this.state.lineOffset}>
-            <Notes
-              current={this.state.noteLabel}
-              size={this.state.noteBlockSize}
-              notes={indexedNotes}
-            />
-          </Slider>
-        </SlideBox>
-        <Up />
-      </Wrapper>
+      <>
+        <Wrapper>
+          <Down />
+          <SlideBox>
+            <Slider
+              size={this.state.sliderSize}
+              length={indexedNotes.length}
+              offset={this.state.lineOffset}>
+              <Notes
+                current={this.state.noteLabel}
+                size={this.state.noteBlockSize}
+                notes={indexedNotes}
+              />
+            </Slider>
+          </SlideBox>
+          <Up />
+        </Wrapper>
+        <Frequency value={this.state.frequency} />
+      </>
     ) : (
       <Loading />
     );

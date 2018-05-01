@@ -62,7 +62,7 @@ export default {
   },
 
   plugins: [
-    new CleanWebpackPlugin(['build']),
+    ...(PROD ? [new CleanWebpackPlugin(['build'])] : []),
     new HtmlWebpackPlugin({
       meta: {
         viewport: Object.entries({

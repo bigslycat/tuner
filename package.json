@@ -12,7 +12,7 @@
     "lint": "eslint .",
     "flow": "flow",
     "precommit": "yarn lint",
-    "preversion": "git checkout gh-pages && yarn lint && yarn flow",
+    "preversion": "yarn build && git add build index.html && git commit -m 'Build'",
     "postversion": "git push --follow-tags"
   },
   "dependencies": {

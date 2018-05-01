@@ -128,8 +128,8 @@ const visibleBlack = props =>
 
 const Up: React$ComponentType<{
   visible?: boolean,
-}> = pure(styled(props => (
-  <svg height="24" width="24" viewBox="0 0 24 24" className={props.className}>
+}> = pure(styled(({ visible, ...props }) => (
+  <svg height="24" width="24" viewBox="0 0 24 24" {...props}>
     <path d="M7 14l5-5 5 5z" />
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>
@@ -144,8 +144,8 @@ const Up: React$ComponentType<{
 
 const Down: React$ComponentType<{
   visible?: boolean,
-}> = pure(styled(props => (
-  <svg height="24" width="24" viewBox="0 0 24 24" className={props.className}>
+}> = pure(styled(({ visible, ...props }) => (
+  <svg height="24" width="24" viewBox="0 0 24 24" {...props}>
     <path d="M7 10l5 5 5-5z" />
     <path d="M0 0h24v24H0z" fill="none" />
   </svg>

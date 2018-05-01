@@ -216,10 +216,9 @@ const Frequency = styled(({ value, ...props }) => (
   </p>
 ))`
   color: white;
-  width: 7em;
-  margin: 0 auto;
+  margin: 0;
   font-size: 24px;
-  padding: 1em 0;
+  padding: 1em 0 1em calc(50% - 3.5em);
   font-weight: 300;
   b {
     font-weight: 400;

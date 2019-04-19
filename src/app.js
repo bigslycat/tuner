@@ -3,13 +3,15 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 
-import { injectGlobal } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 import packageJSON from '../package.json';
 
 import { App } from './components/App';
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
+  @import 'https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700';
+
   html, body {
     padding:0;
     margin: 0;
@@ -25,6 +27,9 @@ injectGlobal`
 `;
 
 render(
-  <App version={packageJSON.version} />,
+  <>
+    <GlobalStyle />
+    <App version={packageJSON.version} />
+  </>,
   (document: any).getElementById('root'),
 );

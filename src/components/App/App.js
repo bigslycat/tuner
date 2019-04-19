@@ -38,7 +38,7 @@ const GitHub = styled(props => (
   vertical-align: middle;
 `;
 
-export const App = styled(props => (
+export const App = styled((props: any) => (
   <div className={props.className}>
     <Text fontSize={40}>Musical tuner v{props.version}</Text>
     <Text pb="1em">

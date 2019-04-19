@@ -12,14 +12,16 @@ const audioContext = new AudioContext();
 const analyser = audioContext.createAnalyser();
 analyser.fftSize = 32768;
 
-navigator.mediaDevices &&
+if (navigator.mediaDevices) {
   navigator.mediaDevices
     .getUserMedia({ audio: true })
     .then(stream => {
       const microphoneStream = audioContext.createMediaStreamSource(stream);
       microphoneStream.connect(analyser);
     })
+    // eslint-disable-next-line no-console
     .catch(e => console.error('Error capturing audio:', e));
+}
 
 const log2 = Math.log(2);
 
@@ -28,12 +30,12 @@ const noteIndexFromPitch = frequency =>
 
 const roundN = precision => {
   const multipler = 10 ** precision;
-  return value => Math.round(value * multipler) / multipler;
+  return (value: number) => Math.round(value * multipler) / multipler;
 };
 
 const round2 = roundN(2);
 
-const position = noteIndex => round2(noteIndex / indexedNotes.length * 100);
+const position = noteIndex => round2((noteIndex / indexedNotes.length) * 100);
 
 const getFrequency = createPitcher(audioContext, analyser);
 
@@ -44,6 +46,7 @@ const units: Units = ['px', 'em', 'rem', '%'];
 
 class Value<U: Unit> {
   value: number;
+
   unit: U;
 
   static parse = (value: string | number): Value<Unit> => {
@@ -113,17 +116,17 @@ const Slider = sys(
     blacklist: ['offset', 'length'],
   },
   css`
-    width: ${props => props.size};
-    transform: translateX(${props => -props.offset}%);
+    width: ${(props: any) => props.size};
+    transform: translateX(${(props: any) => -props.offset}%);
     transition-property: transform;
     transition-duration: 300ms;
   `,
 );
 
-const currentBlack = props =>
+const currentBlack = (props: any) =>
   props.isCurrent ? 'rgba(0, 0, 0, 1)' : 'rgba(0, 0, 0, 0)';
 
-const visibleBlack = props =>
+const visibleBlack = (props: any) =>
   props.visible === false ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 1)';
 
 const Up: React$ComponentType<{
@@ -158,9 +161,7 @@ const Down: React$ComponentType<{
   color: red;
 `);
 
-const NoteLabel: React$ComponentType<{
-  isCurrent: boolean,
-}> = pure(styled.div`
+const NoteLabel = styled('div')`
   border-radius: 3px;
   text-align: center;
   padding: 0;
@@ -168,14 +169,14 @@ const NoteLabel: React$ComponentType<{
   line-height: 1.5em;
   box-sizing: border-box;
   width: 100%;
-  color: ${props => (props.isCurrent ? '#fff' : '#000')};
+  color: ${(props: any) => (props.isCurrent ? '#fff' : '#000')};
   background-color: ${currentBlack};
   transition-property: background-color;
   transition-duration: 300ms;
   font-family: 'Yanone Kaffeesatz';
   font-weight: 700;
   letter-spacing: 0.05em;
-`);
+`;
 
 const Note: React$ComponentType<{
   isCurrent: boolean,
@@ -186,7 +187,7 @@ const Note: React$ComponentType<{
     <Down visible={props.isCurrent} />
   </div>
 ))`
-  width: ${props => props.size};
+  width: ${(props: any) => props.size};
   transform: translateX(-50%);
   display: inline-block;
 `);
@@ -202,19 +203,19 @@ const Notes = pure(props =>
   )),
 );
 
-const Loading = styled.p.attrs({
-  children: 'Connecting to microphone...',
-})`
+const Loading = styled.p`
   text-align: center;
   font-size: 28px;
   font-weight: 300;
 `;
 
-const Frequency = styled(({ value, ...props }) => (
-  <p {...props}>
-    Frequency: <b>{round2(value)}</b> Hz
-  </p>
-))`
+const Frequency = styled(({ value, ...props }) =>
+  value == null ? null : (
+    <p {...props}>
+      Frequency: <b>{round2(value)}</b> Hz
+    </p>
+  ),
+)`
   color: white;
   margin: 0;
   font-size: 24px;

@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  dev:
+    build:
+      dockerfile: Dockerfile.deps
+      context: .
+    container_name: tuner-app-dev
+    restart: always
+    networks:
+      - web
+      - default
+    labels:
+      traefik.docker.network: web
+      traefik.enable: true
+      traefik.basic.frontend.rule: Host:tuner.dev.stupidcat.wtf
+      traefik.basic.port: 80
+      traefik.basic.protocol: http
+      traefik.hmr.frontend.rule: Host:hmr.tuner.dev.stupidcat.wtf
+      traefik.hmr.port: 443
+      traefik.hmr.protocol: http
+    volumes:
+      - ./package.json:/app/package.json:ro
+      - ./yarn.lock:/app/yarn.lock:ro
+      - ./src:/app/src:ro
+      - ./node_modules/cubic-spline-rs:/app/node_modules/cubic-spline-rs:ro
+    command: yarn parcel src/index.pug --port 80 --hmr-port 443 --hmr-hostname hmr.tuner.dev.stupidcat.wtf --no-cache
+
+networks:
+  web:
+    external: true

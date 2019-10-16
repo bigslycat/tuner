@@ -1,61 +1,314 @@
 /* @flow */
 
 import * as React from 'react';
-import styled from 'styled-components';
-import sys from 'system-components';
+import { BrowserRouter } from 'react-router-dom';
+import styled, { ThemeProvider, css } from '@xstyled/emotion';
+import { th } from '@xstyled/system';
+import { opacify } from 'polished';
+import { useStore } from 'effector-react';
 
-import { Tuner } from '../Tuner';
+import { theme, Global } from './theme';
 
-const Text = sys(
-  {
-    is: 'p',
-    m: 0,
-    pb: '0.4em',
-    fontSize: 24,
-    textAlign: 'center',
-    fontWeight: 300,
-  },
-  'weight',
-  'textAlign',
-  'space',
-  'fontSize',
-);
+import {
+  start,
+  stop,
+  indexedNotes,
+  noteIndex$,
+  positionOffset$,
+  active$,
+  pending$,
+  mediaStreamError$,
+} from '../../services/tuner';
 
-const Link = styled.a`
-  color: inherit;
-  text-decoration: none;
-  display: inline-block;
-  vertical-align: middle;
-`;
-
-const GitHub = styled(props => (
-  <svg height="24" width="24" viewBox="0 0 24 24" {...props}>
-    <path d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z" />
-  </svg>
-))`
-  fill: white;
-  margin-right: 0.3em;
-  vertical-align: middle;
-`;
-
-export const App = styled(props => (
-  <div className={props.className}>
-    <Text fontSize={40}>Musical tuner v{props.version}</Text>
-    <Text pb="1em">
-      <Link href="https://github.com/bigslycat/tuner">
-        <GitHub />
-        github.com/<b>bigslycat/tuner</b>
-      </Link>
-    </Text>
-    <Tuner />
-  </div>
-))`
-  width: 100%;
+const AppBody = styled.div`
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: black;
-  font-family: 'Yanone Kaffeesatz';
-  color: white;
+
+  display: grid;
+  row-gap: 32px;
+  grid-template-columns: auto minmax(200px, 800px) auto;
+  grid-template-rows: auto 40px 80px 48px auto;
+  grid-template-areas:
+    '. .      .'
+    '. header .'
+    '. main  .'
+    '. footer .'
+    '. .      .';
+
+  background-color: body;
 `;
+
+const Heading1: React$AbstractComponent<{}, HTMLHeadingElement> = styled.h1Box`
+  color: textOnBody;
+  font-size: 40;
+  line-height: 1em;
+  font-family: display;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+`;
+
+const TunerBody: React$AbstractComponent<{}, HTMLDivElement> = React.memo(styled.box`
+  position: relative;
+  overflow: hidden;
+  background-color: bodyContrast;
+  cursor: default;
+
+  transition: all 1000ms ease-in-out;
+
+  ${props =>
+    !props.active &&
+    css`
+      filter: blur(1px);
+      opacity: 0.2;
+    `}
+
+  :before {
+    box-shadow: inset 0 0 20px 3px black;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    ${props => {
+      const transparent = opacify(-1, props.theme.colors.body);
+      return css`
+        background-image: linear-gradient(
+          90deg,
+          ${props.theme.colors.body} 0,
+          ${transparent} calc(50% - 24px),
+          ${transparent} calc(50% + 24px),
+          ${props.theme.colors.body} 100%
+        );
+      `;
+    }}
+  }
+`);
+
+const TunerWrapper: React$AbstractComponent<{}, HTMLDivElement> = React.memo(styled.div`
+  padding-left: 50%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+
+  :before,
+  :after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    left: calc(50% - 5px);
+  }
+
+  :before {
+    top: 0;
+    border-width: 5px 5px 0 5px;
+    border-color: ${th.color('body')} transparent transparent transparent;
+  }
+
+  :after {
+    bottom: 0;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent ${th.color('body')} transparent;
+  }
+`);
+
+const noteBodyCurrent = css`
+  color: textOnBody;
+  background-color: body;
+
+  :before,
+  :after {
+    opacity: 1;
+  }
+`;
+
+export const NoteBody: React$AbstractComponent<{}, HTMLDivElement> = React.memo(styled.div`
+  color: textOnBodyContrast;
+  background-color: transparent;
+  transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: display;
+  font-size: 24px;
+
+  border-radius: 5px;
+
+  :before,
+  :after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    transition: opacity 300ms ease-in-out;
+    opacity: 0;
+  }
+
+  :before {
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent ${th.color('body')} transparent;
+    top: -5px;
+  }
+
+  :after {
+    border-width: 5px 5px 0 5px;
+    border-color: ${th.color('body')} transparent transparent transparent;
+    bottom: -5px;
+  }
+
+  ${props => props.current && noteBodyCurrent}
+`);
+
+export const Note: React$ComponentType<{
+  index: number,
+}> = React.memo(props => {
+  const noteIndex = useStore(noteIndex$);
+  const current = props.index === noteIndex;
+  const { label } = indexedNotes[props.index];
+  return <NoteBody current={current}>{label}</NoteBody>;
+});
+
+const noteBlockSize = 48;
+const notesBodySize = noteBlockSize * indexedNotes.length;
+
+export const NotesBody: React$AbstractComponent<{}, HTMLDivElement> = React.memo(styled.div`
+  display: grid;
+  grid-template-columns: repeat(${indexedNotes.length}, ${noteBlockSize}px);
+  transition: transform 400ms ease-in-out;
+  width: ${notesBodySize}px;
+  height: 100%;
+`);
+
+export const Tuner: React$ComponentType<{}> = React.memo(props => {
+  // eslint-disable-next-line react/no-array-index-key
+  const notes = React.useMemo(() => indexedNotes.map((note, i) => <Note index={i} key={i} />), []);
+  const positionOffset = useStore(positionOffset$) || 0;
+  const active = useStore(active$);
+
+  return (
+    <TunerBody {...props} active={active}>
+      <TunerWrapper>
+        <NotesBody
+          style={{
+            transform: `translateX(${-positionOffset}%)`,
+          }}>
+          {notes}
+        </NotesBody>
+      </TunerWrapper>
+    </TunerBody>
+  );
+});
+
+export const Button: React$AbstractComponent<{}, HTMLButtonElement> = styled.buttonBox`
+  color: black;
+  background-color: #ff8800;
+  border: none;
+  font-family: base;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 24px;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 21px;
+  border-radius: 5px;
+  border: solid 3px #ff8800;
+  ${props =>
+    props.outline &&
+    css`
+      color: #ff8800;
+      background-color: transparent;
+    `}
+`;
+
+const AppBranch: React$ComponentType<{}> = () => {
+  const active = useStore(active$);
+  const pending = useStore(pending$);
+  const error = useStore(mediaStreamError$);
+
+  if (pending) {
+    return null;
+  }
+
+  if (error) {
+    return (
+      <>
+        <Body>
+          {error.name === 'NotAllowedError'
+            ? "I can't work without microphone access. Please reset your decision in browser and retry."
+            : error.message}
+        </Body>
+        <Footer>
+          <Button onClick={start} mr='16px'>
+            Retry
+          </Button>
+          <Button onClick={stop} outline>
+            Cancel
+          </Button>
+        </Footer>
+      </>
+    );
+  }
+
+  if (active) {
+    return (
+      <Footer>
+        <Button onClick={stop} outline>
+          Stop
+        </Button>
+      </Footer>
+    );
+  }
+
+  return (
+    <Footer>
+      <Button onClick={start}>Start</Button>
+    </Footer>
+  );
+};
+
+const Body: React$AbstractComponent<{}, HTMLDivElement> = styled.main`
+  grid-area: main;
+  color: textOnBody;
+  font-family: base;
+  font-size: 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1;
+  text-shadow: 0 0 10px black;
+  padding: 0 16px;
+`;
+
+const Footer: React$AbstractComponent<{}, HTMLDivElement> = styled.footer`
+  grid-area: footer;
+  display: flex;
+  justify-content: center;
+`;
+
+export const App: React$ComponentType<{
+  analyserFftSize?: number,
+}> = () => (
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <Global />
+      <AppBody>
+        <Heading1 gridArea='header'>Musical tuner</Heading1>
+        <Tuner gridArea='main' />
+        <AppBranch />
+      </AppBody>
+    </ThemeProvider>
+  </BrowserRouter>
+);

@@ -1,0 +1,19 @@
+html
+  head
+    meta(charset='UTF-8')
+    -
+      const viewport = Object.entries({
+        width: 'device-width',
+        'initial-scale': '1.0',
+        'maximum-scale': '1.0',
+        'minimum-scale': '1.0',
+        'user-scalable': 'no',
+      })
+        .map(entry => entry.join('='))
+        .join(',');
+    meta(name='viewport', content=viewport)
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title Document
+  body
+    #root
+    script(src="./index.js")

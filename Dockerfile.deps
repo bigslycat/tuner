@@ -1,0 +1,8 @@
+FROM node:12.10.0-alpine
+
+WORKDIR /app
+
+ADD package.json .
+ADD yarn.lock .
+
+RUN yarn --prod

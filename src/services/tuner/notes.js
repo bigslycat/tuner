@@ -1,5 +1,10 @@
 /* @flow */
 
+export type Note = {
+  label: string,
+  frequency: number,
+};
+
 export const octaves = [
   {
     C: 16.352,
@@ -157,17 +162,12 @@ export const octaves = [
   },
 ];
 
-export const notes = octaves.reduce((acc, octave, octaveIndex) => {
+export const notes: { [string]: number } = octaves.reduce((acc, octave, octaveIndex) => {
   Object.entries(octave).forEach(([noteLabel, frequency]) => {
     acc[noteLabel + octaveIndex] = frequency;
   });
   return acc;
 }, {});
-
-type Note = {
-  label: string,
-  frequency: number,
-};
 
 export const indexedNotes: $ReadOnlyArray<Note> = Object.entries(notes).map(
   ([label, frequency]: any): Note => ({

@@ -1,5 +1,46 @@
 {
   "name": "tuner",
+  "version": "0.0.1",
+  "private": true,
   "type": "module",
+  "imports": {
+    "#pages/*": "./src/pages/*",
+    "#widgets/*": "./src/widgets/*",
+    "#features/*": "./src/features/*",
+    "#entities/*": "./src/entities/*",
+    "#shared/*": "./src/shared/*"
+  },
+  "scripts": {
+    "build": "rsbuild build",
+    "build:rsdoctor": "cross-env RSDOCTOR=true rsbuild build",
+    "dev": "rsbuild",
+    "dev:rsdoctor": "cross-env RSDOCTOR=true rsbuild",
+    "preview": "rsbuild preview",
+    "test": "rstest",
+    "typecheck": "tsc -b",
+    "typecheck:clean": "tsc -b --clean"
+  },
+  "dependencies": {
+    "core-js": "^3.50.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^2.1.13",
+    "@rsbuild/plugin-react": "^2.1.0",
+    "@rsdoctor/rspack-plugin": "^1.6.3",
+    "@rstest/adapter-rsbuild": "^0.11.9",
+    "@rstest/core": "^0.11.9",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "cross-env": "^10.1.0",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=26.5.0"
+  },
   "packageManager": "yarn@6.0.0-rc.19"
 }

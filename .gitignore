@@ -1,1 +1,4 @@
+dist
+coverage
+.tsbuild
 node_modules

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    "resolveJsonModule": true,
+
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
+  }
+}

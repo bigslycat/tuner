@@ -1,0 +1,76 @@
+{
+  "oxc.enable": true,
+  "prettier.enable": false,
+  "biome.enabled": false,
+  "eslint.enable": false,
+
+  "editor.formatOnSave": false,
+
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[typescriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[javascriptreact]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[css]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[yaml]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[github-actions-workflow]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[json]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "[jsonc]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "oxc.oxc-vscode",
+    "editor.codeActionsOnSave": { "source.fixAll.oxc": "always" }
+  },
+
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.tsdk.path": "node_modules/typescript"
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.base.json",
+
+  "compilerOptions": {
+    "composite": true,
+
+    "target": "esnext",
+    "lib": ["ESNext"],
+
+    "types": ["node"],
+
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
+    "noEmit": true,
+    "tsBuildInfoFile": "./.tsbuild/node.tsbuildinfo"
+  },
+
+  "include": ["*.ts"]
+}

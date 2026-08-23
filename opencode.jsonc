@@ -1,0 +1,37 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "mcp": {
+    "mdn": {
+      "type": "remote",
+      "url": "https://mcp.mdn.mozilla.net",
+      "enabled": true,
+    },
+
+    "codegraph": {
+      "type": "local",
+      "command": ["codegraph", "serve", "--mcp"],
+      "enabled": true,
+    },
+  },
+
+  "formatter": {
+    "oxfmt": {
+      "extensions": [
+        ".js",
+        ".cjs",
+        ".mjs",
+        ".ts",
+        ".cts",
+        ".mts",
+        ".jsx",
+        ".tsx",
+        ".md",
+        ".yml",
+        ".yaml",
+        ".json",
+        ".jsonc",
+      ],
+    },
+  },
+}
